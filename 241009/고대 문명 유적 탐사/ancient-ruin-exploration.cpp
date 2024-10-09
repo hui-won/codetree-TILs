@@ -11,9 +11,9 @@ int visited[N][N] = { 0 };
 queue<int> uWater;
 
 struct possible {
-	int value;
-	int degree;
-	int r, c;
+	int value = 0;
+	int degree = 4;
+	int r = N, c = N;
 
 	bool operator < (const possible& a) const {
 		if (value == a.value) {
@@ -121,6 +121,8 @@ int getUwater() {
 }
 
 int explore() {
+	possible bestCase;
+
 	for (int  i = 1; i < N-1; i++)
 	{
 		for (int j = 1; j < N-1; j++)
@@ -145,18 +147,46 @@ int explore() {
 				tmpCase.r = i;
 				tmpCase.c = j;
 
-				cases.push(tmpCase);
+				if (tmpCase.value > bestCase.value) {
+					bestCase.value = tmpCase.value;
+					bestCase.r = i;
+					bestCase.c = j;
+					bestCase.degree = k + 1;
+				}
+				else if (tmpCase.value == bestCase.value) {
+					if (tmpCase.degree < bestCase.degree) {
+						bestCase.value = tmpCase.value;
+						bestCase.r = i;
+						bestCase.c = j;
+						bestCase.degree = k + 1;
+					}
+					else if (tmpCase.degree == bestCase.degree) {
+						if (tmpCase.c < bestCase.c) {
+							bestCase.value = tmpCase.value;
+							bestCase.r = i;
+							bestCase.c = j;
+							bestCase.degree = k + 1;
+						}
+						else if(tmpCase.c == bestCase.c) {
+							if (tmpCase.r < bestCase.r) {
+								bestCase.value = tmpCase.value;
+								bestCase.r = i;
+								bestCase.c = j;
+								bestCase.degree = k + 1;
+							}
+						}
+					}
+				}
+
 				while (!uWaterIget.empty()) uWaterIget.pop();
 			}
 		}
 	}
 
-	possible curCase = cases.top();
-	while (!cases.empty()) cases.pop();
 
-	for (int i = 0; i < curCase.degree; i++)
+	for (int i = 0; i < bestCase.degree; i++)
 	{
-		rotateMap(curCase.r, curCase.c);
+		rotateMap(bestCase.r, bestCase.c);
 	}
 	
 	int total = 0;
