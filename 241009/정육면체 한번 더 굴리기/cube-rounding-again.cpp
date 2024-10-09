@@ -95,7 +95,7 @@ void decideDirection(int boardNum) {
 		int nr = diceInfo.r + dir[tmpViewDir][0];
 		int nc = diceInfo.c + dir[tmpViewDir][1];
 
-		if (isValidBoundary) {
+		if (isValidBoundary(nr, nc)) {
 			diceInfo.diceDir = DiceDir::TRIGHT;
 			diceInfo.viewDir = tmpViewDir;
 		}
@@ -109,7 +109,7 @@ void decideDirection(int boardNum) {
 		int nr = diceInfo.r + dir[tmpViewDir][0];
 		int nc = diceInfo.c + dir[tmpViewDir][1];
 
-		if (isValidBoundary) {
+		if (isValidBoundary(nr, nc)) {
 			diceInfo.diceDir = DiceDir::TLEFT;
 			diceInfo.viewDir = tmpViewDir;
 		}
@@ -122,7 +122,7 @@ void decideDirection(int boardNum) {
 		tmpViewDir = diceInfo.viewDir;
 		int nr = diceInfo.r + dir[tmpViewDir][0];
 		int nc = diceInfo.c + dir[tmpViewDir][1];
-		if (isValidBoundary) {
+		if (isValidBoundary(nr, nc)) {
 			diceInfo.diceDir = DiceDir::GO;
 			diceInfo.viewDir = tmpViewDir;
 		}
@@ -137,6 +137,10 @@ void decideDirection(int boardNum) {
 void moveDice() {
 	int nextR = diceInfo.r + dir[diceInfo.viewDir][0];
 	int nextC = diceInfo.c + dir[diceInfo.viewDir][1];
+
+	if (!isValidBoundary(nextR,nextC)) {
+		cout << "here!!";
+	}
 
 	diceInfo.r = nextR;
 	diceInfo.c = nextC;
