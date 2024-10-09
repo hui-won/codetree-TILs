@@ -67,10 +67,10 @@ int findUWater(int r, int c) {
 	pair<int, int> location;
 	que.push({ r, c });
 	int count = 0;
+	visited[r][c] = 1;
 
 	while (!que.empty()) {
 		location = que.front();
-		visited[location.first][location.second] = 1;
 		visitPos.push({ location.first,location.second });
 		que.pop();
 		count++;
@@ -83,6 +83,7 @@ int findUWater(int r, int c) {
 			if (visited[nr][nc]) continue;
 			if (hMap[nr][nc] == hMap[location.first][location.second]) {
 				que.push({ nr, nc });
+				visited[nr][nc] = 1;
 			}
 		}
 	}
@@ -109,7 +110,7 @@ int getUwater() {
 	}
 
 	position tmp;
-	while (!uWaterIget.empty()) {
+	while (!uWaterIget.empty()&&!uWater.empty()) {
 		tmp = uWaterIget.top();
 		uWaterIget.pop();
 
