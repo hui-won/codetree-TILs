@@ -14,19 +14,6 @@ struct possible {
 	int value = 0;
 	int degree = 4;
 	int r = N, c = N;
-
-	bool operator < (const possible& a) const {
-		if (value == a.value) {
-			if (degree == a.degree) {
-				if (c == a.c) {
-					return r > a.r;
-				}
-				return c > a.c;
-			}
-			return degree > a.degree;
-		}
-		return value < a.value;
-	}
 };
 struct position {
 	int r, c;
@@ -183,6 +170,8 @@ int explore() {
 		}
 	}
 
+	if (bestCase.value == 0)
+		return 0;
 
 	for (int i = 0; i < bestCase.degree; i++)
 	{
