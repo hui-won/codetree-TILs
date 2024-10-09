@@ -41,7 +41,7 @@ void rollTheDice() {
 	int right = diceInfo.right;
 
 	if (diceInfo.diceDir == DiceDir::GO) {
-		front = 7 - diceInfo.bottom;
+		bottom = diceInfo.front;
 	}
 	else if (diceInfo.diceDir == DiceDir::TRIGHT) {
 		bottom = diceInfo.right;
