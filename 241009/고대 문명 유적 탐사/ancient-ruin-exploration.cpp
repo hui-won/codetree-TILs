@@ -11,9 +11,22 @@ int visited[N][N] = { 0 };
 queue<int> uWater;
 
 struct possible {
-	int value = 0;
-	int degree = 4;
-	int r = N, c = N;
+	int value;
+	int degree;
+	int r, c;
+
+	bool operator < (const possible& a) const {
+		if (value == a.value) {
+			if (degree == a.degree) {
+				if (c == a.c) {
+					return r > a.r;
+				}
+				return c > a.c;
+			}
+			return degree > a.degree;
+		}
+		return value < a.value;
+	}
 };
 struct position {
 	int r, c;
@@ -87,7 +100,7 @@ int findUWater(int r, int c) {
 int getUwater() {
 	int total = 0;
 	memset(visited, 0, sizeof(visited));
-	for (int  r = 0; r < N; r++)
+	for (int r = 0; r < N; r++)
 	{
 		for (int c = 0; c < N; c++)
 		{
@@ -97,7 +110,7 @@ int getUwater() {
 	}
 
 	position tmp;
-	while (!uWaterIget.empty()&&!uWater.empty()) {
+	while (!uWaterIget.empty() && !uWater.empty()) {
 		tmp = uWaterIget.top();
 		uWaterIget.pop();
 
@@ -108,11 +121,9 @@ int getUwater() {
 }
 
 int explore() {
-	possible bestCase;
-
-	for (int  i = 1; i < N-1; i++)
+	for (int i = 1; i < N - 1; i++)
 	{
-		for (int j = 1; j < N-1; j++)
+		for (int j = 1; j < N - 1; j++)
 		{
 			for (int k = 0; k < 4; k++)
 			{
@@ -134,50 +145,21 @@ int explore() {
 				tmpCase.r = i;
 				tmpCase.c = j;
 
-				if (tmpCase.value > bestCase.value) {
-					bestCase.value = tmpCase.value;
-					bestCase.r = i;
-					bestCase.c = j;
-					bestCase.degree = k + 1;
-				}
-				else if (tmpCase.value == bestCase.value) {
-					if (tmpCase.degree < bestCase.degree) {
-						bestCase.value = tmpCase.value;
-						bestCase.r = i;
-						bestCase.c = j;
-						bestCase.degree = k + 1;
-					}
-					else if (tmpCase.degree == bestCase.degree) {
-						if (tmpCase.c < bestCase.c) {
-							bestCase.value = tmpCase.value;
-							bestCase.r = i;
-							bestCase.c = j;
-							bestCase.degree = k + 1;
-						}
-						else if(tmpCase.c == bestCase.c) {
-							if (tmpCase.r < bestCase.r) {
-								bestCase.value = tmpCase.value;
-								bestCase.r = i;
-								bestCase.c = j;
-								bestCase.degree = k + 1;
-							}
-						}
-					}
-				}
-
+				cases.push(tmpCase);
 				while (!uWaterIget.empty()) uWaterIget.pop();
 			}
 		}
 	}
 
-	if (bestCase.value == 0)
-		return 0;
+	possible curCase = cases.top();
+	if (curCase.value == 0) return 0;
+	while (!cases.empty()) cases.pop();
 
-	for (int i = 0; i < bestCase.degree; i++)
+	for (int i = 0; i < curCase.degree; i++)
 	{
-		rotateMap(bestCase.r, bestCase.c);
+		rotateMap(curCase.r, curCase.c);
 	}
-	
+
 	int total = 0;
 	int ans;
 	while (1) {
